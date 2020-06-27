@@ -1,1 +1,1 @@
-echo "works" >> test.txt
+echo "got git hook!" >> test.txt
