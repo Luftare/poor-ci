@@ -26,12 +26,40 @@ When the form opens up, fill in:
 
 ### What to write into the push-hook.sh?
 
-Simple script to keep other repository up-to-date, using [pm2](https://pm2.keymetrics.io/)
+Very simple script to keep other repository up-to-date, using [pm2](https://pm2.keymetrics.io/):
 
 ```sh
+#!/bin/sh
 pm2 stop other-app-name
 cd /path/to/other/app/repo
 git pull
 npm i
 pm2 start other-app-name
+```
+
+Here's a more involved example including running tests before deploying:
+
+```sh
+#!/bin/sh
+
+abort()
+{
+    # Scripts to run after failed tests such as teardown
+    echo "Tests failed. Let's teardown..."
+    exit 1
+}
+
+trap 'abort' 0
+
+set -e
+
+# Scripts to run to test the new code
+cd path/to/other/app
+git pull
+npm i
+npm run test
+
+trap : 0
+# Scripts to run after successfull tests
+echo "Tests passed! Now let's deploy..."
 ```
