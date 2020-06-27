@@ -1,11 +1,12 @@
+require('dotenv').config();
 const express = require('express');
 const app = express();
-const port = 3000;
+const port = process.env.PORT;
 const { execSync } = require('child_process');
 const crypto = require('crypto');
 const bodyParser = require('body-parser');
 
-const secret = 'CHANGE_ME';
+const secret = process.env.GITHUB_HOOK_SECRET;
 const sigHeaderName = 'X-Hub-Signature';
 
 app.use(bodyParser.json());
@@ -35,7 +36,7 @@ function verifyPostData(req, res, next) {
 }
 
 app.post('/', verifyPostData, (req, res) => {
-  execSync('sh hook.sh');
+  execSync('sh push-hook.sh');
   res.sendStatus(200);
 });
 
