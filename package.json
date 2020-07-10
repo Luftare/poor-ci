@@ -7,7 +7,6 @@
     "build": "tsc",
     "generate-ci-config": "cp ci.example.json ci.json",
     "test": "jest --config jestconfig.json",
-    "format": "prettier",
     "start": "listen-to-github"
   },
   "keywords": [],
@@ -25,6 +24,7 @@
     "husky": "^4.2.5",
     "jest": "^26.1.0",
     "prettier": "^2.0.5",
+    "pretty-quick": "^2.0.1",
     "supertest": "^4.0.2",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.5"
@@ -34,7 +34,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm test"
+      "pre-commit": "pretty-quick --staged && npm test && npm run build && git add build"
     }
   }
 }
