@@ -5,9 +5,9 @@
   "main": "build/index.js",
   "scripts": {
     "build": "tsc",
-    "generate-env": "cp .env-example .env",
+    "generate-ci-config": "cp ci.example.json ci.json",
     "test": "jest --config jestconfig.json",
-    "start": "node build/index.js"
+    "start": "listen-to-github"
   },
   "keywords": [],
   "author": "",
@@ -25,5 +25,8 @@
     "supertest": "^4.0.2",
     "ts-jest": "^26.1.1",
     "typescript": "^3.9.5"
+  },
+  "bin": {
+    "listen-to-github": "./build/index.js"
   }
 }

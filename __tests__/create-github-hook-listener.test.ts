@@ -1,5 +1,5 @@
 import { agent } from 'supertest';
-import { createGithubHookListener } from '../src/';
+import { createGithubHookListener } from '../src/create-github-hook-listener';
 
 describe('createGithubHookListener', () => {
   const mockSecret = 'somesecret';

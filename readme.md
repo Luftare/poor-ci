@@ -2,13 +2,21 @@
 
 A simple server to listen to github hooks and to run scripts. It can be used to automatically keep deployments up-to-date without having to ssh to the machine.
 
-## Setup
+## Getting started
 
-1. generate `.env`: `npm run generate-env`
-2. fill values to `.env`
-3. modify: `push-hook.sh`
-4. install dependencies: `npm i`
-5. run server: `npm start`
+1. Generate `ci.json` with contents of:
+
+```json
+{
+  "port": 3000,
+  "secret": "same-as-in-github",
+  "events": {
+    "push": "echo 'some bash script'"
+  }
+}
+```
+
+2. Start the ci: `listen-to-github`
 
 ## FAQ
 
@@ -24,9 +32,23 @@ When the form opens up, fill in:
 - Just the push event
 - Active: yes
 
-### What to write into the push-hook.sh?
+### How to deploy after push to master?
 
 Very simple script to keep other repository up-to-date, using [pm2](https://pm2.keymetrics.io/):
+
+In `ci.json`:
+
+```json
+{
+  "port": 3000,
+  "secret": "same-as-in-github",
+  "events": {
+    "push": "sh deploy.sh"
+  }
+}
+```
+
+Create script file `deploy.sh`:
 
 ```sh
 #!/bin/sh

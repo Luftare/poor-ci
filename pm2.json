@@ -1,0 +1,9 @@
+{
+  "apps": [
+    {
+      "name": "poor-ci",
+      "script": "npm",
+      "args": "start"
+    }
+  ]
+}

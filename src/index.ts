@@ -1,25 +1,26 @@
-import * as express from 'express';
-import * as bodyParser from 'body-parser';
-import { Response, Request } from 'express';
-import { validateSignature } from './validate-signature';
+#!/usr/bin/env node
+import { readFileSync, existsSync } from 'fs';
+import { execSync } from 'child_process';
+import { createGithubHookListener } from './create-github-hook-listener';
 
-export interface ListenerProperties {
+interface CiConfig {
+  port: number;
   secret: string;
-  onAuthorizedCall: Function;
+  events: {
+    push: string;
+  };
 }
 
-export const createGithubHookListener = ({
+const CONFIG_FILENAME = 'ci.json';
+
+if (!existsSync(CONFIG_FILENAME)) {
+  throw new Error(`Missing ci config file: ${CONFIG_FILENAME}`);
+}
+const { secret, events, port } = JSON.parse(
+  readFileSync(CONFIG_FILENAME, 'utf8')
+) as CiConfig;
+
+createGithubHookListener({
   secret,
-  onAuthorizedCall,
-}: ListenerProperties) => {
-  const app = express();
-
-  app.use(bodyParser.json());
-
-  app.post('/', validateSignature(secret), (req: Request, res: Response) => {
-    onAuthorizedCall();
-    res.sendStatus(200);
-  });
-
-  return app;
-};
+  onAuthorizedCall: () => execSync(events.push),
+}).listen(port, () => console.log(`Listening to Github hook at: ${port}`));
