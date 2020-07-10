@@ -1,10 +1,14 @@
 # Poor CI
 
-A simple server to listen to github hooks and to run scripts. It can be used to automatically keep deployments up-to-date without having to ssh to the machine.
+A simple server to listen to github hooks and to run scripts. It can be used to automatically keep deployments up-to-date without having to ssh to the machine. The idea is simple: a server is actively listening to `POST` calls to a given port. Once receiving a call, it will check if the caller has used the correct secret and if so, executes given (`ci.json` --> `events.push`) bash script.
+
+## How to install
+
+`npm i -g Luftare/poor-ci`
 
 ## Getting started
 
-1. Generate `ci.json` with contents of:
+1. Create `ci.json` with contents of:
 
 ```json
 {
@@ -16,7 +20,7 @@ A simple server to listen to github hooks and to run scripts. It can be used to 
 }
 ```
 
-2. Start the ci: `listen-to-github`
+2. At the same directory, start the ci: `listen-to-github`
 
 ## FAQ
 
@@ -50,8 +54,8 @@ In `ci.json`:
 
 Create script file `deploy.sh`:
 
-```sh
-#!/bin/sh
+```bash
+#!/usr/bin/env bash
 pm2 stop other-app-name
 cd /path/to/other/app/repo
 git pull
@@ -61,9 +65,8 @@ pm2 start other-app-name
 
 Here's a more involved example including running tests before deploying:
 
-```sh
-#!/bin/sh
-
+```bash#!/usr/bin/env bash
+#!/usr/bin/env bash
 abort()
 {
     # Scripts to run after failed tests such as teardown
